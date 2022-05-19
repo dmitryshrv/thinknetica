@@ -16,7 +16,7 @@ price = gets.to_i
 puts "Введите количество товара:"
 amount = gets.to_f
 
-basket[item] = {price => amount}
+basket[item] = {price: price, amount: amount}
 sum += price * amount
 
 end
@@ -24,8 +24,8 @@ end
 p basket
 
 basket.each { |key, value|
-    v = value.to_a 
-    puts "Сумма за #{key} = #{v[0][0] * v[0][1]}"
+    
+    puts "Сумма за #{key} = #{value[:price] * value[:amount]}"
 }
 
 puts "Общая сумма корзины = #{sum}"
