@@ -1,5 +1,4 @@
 fib = [1]
-
 fib_next = 1
 
 while fib_next < 100 
