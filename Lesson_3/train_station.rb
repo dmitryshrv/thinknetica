@@ -6,16 +6,15 @@ class Station
     @trains = []
   end
 
-  def get_train(train)
+  def get_train(train) #помещаем поезд на станцию
     trains << train
   end
   
-  def trains_by_type(type)
-     t = trains.select { |train| train.type == type}
-     puts "сейчас на станции #{@name} находятся #{t.size} поездов типа #{type}"
+  def trains_by_type(type) #поезда заданного типа
+    trains.select { |train| train.type == type}
   end
 
-  def depart_train(train)
+  def depart_train(train) #Отправляем поезд со станции
     trains.delete(train)
   end
 end
@@ -28,11 +27,11 @@ class Route
     @route = [first_station, last_station]
   end
 
-  def add_station(station)
+  def add_station(station) #помещаем станцию в маршрут, делаем ее предпоследней 
     route.insert(-2, station)
   end
 
-  def remove_station(station)
+  def remove_station(station) #удалаяем станцию из маршрута, если она не является первой или последний
     if station != route.first && station != route.last
       route.delete(station)
     else
@@ -40,7 +39,7 @@ class Route
     end 
   end
 
-  def show_route
+  def show_route 
     puts "Текущий маршрут:"
     @route.each {|station| p station.name }
   end
@@ -70,17 +69,17 @@ class Train
   end
 
   def delete_wagon
-    @size -= 1 unless @speed.zero?
+    @size -= 1 unless @speed.zero? && @size.zero?
   end
   
-  def set_route(route)
+  def set_route(route) #задаем поезду маршрут, ставим на первую станцию и добавляем поезд на станцию
     @route = route
     @current_station_index = 0
     @route.route.first.get_train(self)
   end
   
-  def move_next_station
-    @route.route[@current_station_index].depart_train(self)
+  def move_next_station #двигаем по маршруту, пока не достигли последней станции
+    @route.route[@current_station_index].depart_train(self) 
 
     unless @route.route[@current_station_index + 1] == @route.route.last 
       @route.route[@current_station_index + 1].get_train(self)
@@ -105,24 +104,15 @@ class Train
     @current_station_index -= 1
   end
 
-  def show_current_staion
-    p "текущая станция маршрута #{@route[@current_station_index].name}"
+  def current_staion
+    @route[@current_station_index]
   end
 
-  def show_next_station
-    if @route[@current_station_index] == @route.last
-      p "Вы на последней станции маршрута"
-    else
-     p "следующая станция маршрута #{@route[@current_station_index + 1].name}"
-    end
+  def next_station
+    @route[@current_station_index + 1] unless @route[@current_station_index] == @route.last
   end
 
-  def show_prev_station
-    if @route[@current_station_index] == @route.first
-      p "Вы на первой станции маршрута"
-    else
-     p "Предыдущая станция маршрута #{@route[@current_station_index - 1].name}"
-    end
+  def prev_station
+    @route[@current_station_index - 1] unless @route[@current_station_index] == @route.first
   end
-
 end
