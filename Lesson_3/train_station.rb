@@ -6,12 +6,12 @@ class Station
     @trains = []
   end
 
-  def get_train(train) #помещаем поезд на станцию
+  def add_train(train) #помещаем поезд на станцию
     trains << train
   end
   
   def trains_by_type(type) #поезда заданного типа
-    trains.select { |train| train.type == type}
+    trains.select { |train| train.type == type }
   end
 
   def depart_train(train) #Отправляем поезд со станции
@@ -21,19 +21,19 @@ end
 
 
 class Route
-  attr_reader :route
+  attr_reader :stations
 
   def initialize(first_station, last_station)
-    @route = [first_station, last_station]
+    @stations = [first_station, last_station]
   end
 
   def add_station(station) #помещаем станцию в маршрут, делаем ее предпоследней 
-    route.insert(-2, station)
+    stations.insert(-2, station)
   end
 
   def remove_station(station) #удалаяем станцию из маршрута, если она не является первой или последний
-    if station != route.first && station != route.last
-      route.delete(station)
+    if station != stations.first && station != stations.last
+      stations.delete(station)
     else
       p 'Нельзя удалять из маршрута первую и конечную станции'
     end 
@@ -41,7 +41,7 @@ class Route
 
   def show_route 
     puts "Текущий маршрут:"
-    @route.each {|station| p station.name }
+    @stations.each {|station| p station.name }
   end
 end
 
@@ -75,30 +75,30 @@ class Train
   def set_route(route) #задаем поезду маршрут, ставим на первую станцию и добавляем поезд на станцию
     @route = route
     @current_station_index = 0
-    @route.route.first.get_train(self)
+    @route.stations.first.add_train(self)
   end
   
   def move_next_station #двигаем по маршруту, пока не достигли последней станции
-    @route.route[@current_station_index].depart_train(self) 
-
-    unless @route.route[@current_station_index + 1] == @route.route.last 
-      @route.route[@current_station_index + 1].get_train(self)
+    @route.stations[@current_station_index].depart_train(self) 
+    
+    unless @route.stations[@current_station_index + 1] == @route.stations.last 
+      @route.stations[@current_station_index + 1].add_train(self) 
     else
-      @route.route.last.get_train(self)
-      p "Нельзя уехать дальше последней станции"
+      p 'Нельзя уехать дальше последней станции'
+      return
     end
 
     @current_station_index += 1
   end
 
   def move_prev_staion
-    @route.route[@current_station_index].depart_train(self)
+    @route.stations[@current_station_index].depart_train(self)
 
-    unless @route.route[@current_station_index - 1] == @route.route.first 
-      @route.route[@current_station_index - 1].get_train(self)
+    unless @route.stations[@current_station_index - 1] == @route.stations.first 
+      @route.stations[@current_station_index - 1].add_train(self)
     else
-      @route.route.first.get_train(self)
-      p "Нельзя уехать дальше первой станции"
+      p 'Нельзя уехать дальше первой станции'
+      return
     end
 
     @current_station_index -= 1
