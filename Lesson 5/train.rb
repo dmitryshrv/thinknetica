@@ -17,6 +17,10 @@ class Train
     @@trains.find {|train| train.number == number}
   end
 
+  def self.all
+    trains
+  end
+
   def speed_up(speed)
     @speed += speed if speed > 0
   end

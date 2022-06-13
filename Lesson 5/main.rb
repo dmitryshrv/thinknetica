@@ -1,5 +1,5 @@
-require_relative 'InstanceCounter'
-require_relative 'brand'
+require_relative 'instance_counter'
+require_relative 'brand_name'
 require_relative 'station'
 require_relative 'route'
 require_relative 'train'

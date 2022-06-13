@@ -1,11 +1,4 @@
 class MainMenu
-  
-  def initialize
-    @stations_list = []
-    @routes = []
-    @trains = []
-    @wagons = []
-  end
 
   def show_menu
     loop do
@@ -51,12 +44,12 @@ protected
         puts ' '
         puts 'Введите название станции: '
         name = gets.chomp
-        @stations_list << Station.new(name)
+        Station.all << Station.new(name)
       when 2
-        unless @stations_list.empty?
+        unless Station.all.empty?
           puts ' '
-          print 'Список всех станций: ' 
-          @stations_list.each { |station| puts station.name, ' ' }
+          print 'Список всех станций: '
+          Station.all.each { |station| puts station.name, ' ' }
         end
       when 3
         show_trains
@@ -78,13 +71,13 @@ protected
 
       case choice
       when 1
-        if @stations_list.size < 2
+        if Station.all.size < 2
           puts 'Должно быть не менее двух станци для создания маршрута'
         else
-          create_route 
+          create_route
         end
       when 2
-        change_route 
+        change_route
       when 0
         break
       end
@@ -101,7 +94,7 @@ protected
       puts '0. Главное меню'
 
       choice = gets.to_i
-      
+
       case choice
         when 1
           create_train
@@ -119,20 +112,20 @@ protected
     puts ' '
     puts 'Выберите станицю'
     index = 1
-    unless @stations_list.empty?
-      @stations_list.each { |station| puts index, station.name, ' ' }
+    unless Station.all.empty?
+      Station.all.each { |station| puts index, station.name, ' ' }
       index += 1
     end
 
     choice = gets.to_i
     puts ' '
     puts 'Поезда на выбранной станции:'
-    @stations_list[choice].trains.each {|train| puts train }
+    Station.all[choice].trains.each {|train| puts train }
   end
 
   def create_route
     count = 1
-    @stations_list.each do |station|
+    Station.all.each do |station|
       print count, ' '
       puts station.name
       count += 1
@@ -145,8 +138,8 @@ protected
     puts 'Конечная: '
     final_index = gets.to_i - 1
     
-    @routes << Route.new(@stations_list[start_index], @stations_list[final_index])
-    p @routes.last
+    Route.all << Route.new(Station.all[start_index], Station.all[final_index])
+    p Route.all.last
   end
 
   def change_route
@@ -156,7 +149,7 @@ protected
       puts 'Выберете маршрут:'
       
       index = 1
-      @routes.each do |route|
+      Route.all.each do |route|
         print index, ' ' 
         route.show_route
         index += 1
@@ -177,23 +170,23 @@ protected
         puts ' '
         puts 'Список всех доступных станций:'
         i = 1
-        @stations_list.each do |station| 
+        Station.all.each do |station| 
           print i
           puts station.name
           i += 1
         end
         puts 'Введите номер станцию для добавления в маршрут'
         name = gets.to_i
-        @routes[choice - 1].add_station(@stations_list[name - 1]) unless @routes[choice - 1].stations.include?(@stations_list[name - 1])
+        Route.all[choice - 1].add_station(Station.all[name - 1]) unless Route.all[choice - 1].stations.include?(Station.all[name - 1])
         break
 
       when 2
         puts ' '
         puts 'Список станций маршрута'
-        @routes[choice - 1].show_route
+        Route.all[choice - 1].show_route
         puts 'Введите номер станции для удаления'
         station_index = gets.to_i
-        @routes[choice - 1].remove_station(@stations_list[station_index - 1])
+        Route.all[choice - 1].remove_station(Station.all[station_index - 1])
         break
       when 0
         break
@@ -214,15 +207,15 @@ protected
 
     case train_type
     when 1
-      @trains << PassengerTrain.new(train_number)
+      Train.all << PassengerTrain.new(train_number)
       puts ''
       print 'Добавлен поезд: '
-      puts @trains.last.number, ' ', @trains.last.type
+      puts Train.all.last.number, ' ', Train.all.last.type
     when 2
-      @trains << CargoTrain.new(train_number)
+      Train.all << CargoTrain.new(train_number)
       puts ''
       print 'Добавлен поезд: '
-      puts @trains.last.number, ' ', @trains.last.type
+      puts Train.all.last.number, ' ', Train.all.last.type
     end
   end
 
@@ -240,36 +233,37 @@ protected
 
     case choice
     when 1
-      if @trains[train_choice - 1].type == :passenger
-        @trains[train_choice - 1].add_wagon(PassengerWagon.new)
+      if Train.all[train_choice - 1].type == :passenger
+        Train.all[train_choice - 1].add_wagon(PassengerWagon.new)
       else
-        @trains[train_choice - 1].add_wagon(CargoWagon.new)
+        Train.all[train_choice - 1].add_wagon(CargoWagon.new)
       end
     when 2
-      @trains[train_choice - 1].delete_wagon
+      Train.all[train_choice - 1].delete_wagon
     end
   end
 
   def show_all_trains
     puts 'Выберите поезд: '
-      index_train = 1
-      @trains.each do |train|
-        print index_train, ' '
-        puts train.number, ' ', train.type
-        index_train += 1
-      end
+    
+    index_train = 1
+    Train.all.each do |train|
+      print index_train, ' '
+      puts train.number, ' ', train.type
+      index_train += 1
+    end
   end
 
   def train_route
     loop do
       show_all_trains
       train_choice = gets.to_i
-      
+
       puts ' '
       puts 'Выберите маршрут'
       index_route = 1
-      @routes.each do |route|
-        print index_route, ' ' 
+      Route.all.each do |route|
+        print index_route, ' '
         route.show_route
         index_route += 1
       end
@@ -284,7 +278,7 @@ protected
 
       case choice
       when 1
-        @trains[train_choice - 1].set_route(@routes[choice_route - 1])
+        Train.all[train_choice - 1].set_route(Route.all[choice_route - 1])
         break
       when 2
         puts ' '
@@ -294,14 +288,13 @@ protected
         
         case action
         when 1
-          @trains[train_choice - 1].move_next_station
+          Train.all[train_choice - 1].move_next_station
           break
         when 2
-          @trains[train_choice - 1].move_prev_staion
+          Train.all[train_choice - 1].move_prev_staion
           break
         end
       end
-    end 
+    end
   end
 end
-
