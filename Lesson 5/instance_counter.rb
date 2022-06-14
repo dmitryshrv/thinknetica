@@ -11,8 +11,8 @@ module InstanceCounter
   module InstanceMethods
     protected
     def register_instance
-      self.class.instance ||= 0
-      self.class.instance += 1
+      self.class.instances ||= 0
+      self.class.instances += 1
     end 
   end
 end

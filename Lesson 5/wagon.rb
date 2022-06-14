@@ -1,5 +1,5 @@
 class Wagon
-  include brand
+  include BrandName
   attr_reader :type
 
   @@wagons = []

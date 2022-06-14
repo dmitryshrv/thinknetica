@@ -13,7 +13,7 @@ class Station
   end
 
   def self.all
-    stations_all
+    @@stations_all
   end
 
 

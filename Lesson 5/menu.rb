@@ -44,7 +44,7 @@ protected
         puts ' '
         puts 'Введите название станции: '
         name = gets.chomp
-        Station.all << Station.new(name)
+        Station.new(name)
       when 2
         unless Station.all.empty?
           puts ' '
@@ -138,7 +138,7 @@ protected
     puts 'Конечная: '
     final_index = gets.to_i - 1
     
-    Route.all << Route.new(Station.all[start_index], Station.all[final_index])
+    Route.new(Station.all[start_index], Station.all[final_index])
     p Route.all.last
   end
 
@@ -207,12 +207,12 @@ protected
 
     case train_type
     when 1
-      Train.all << PassengerTrain.new(train_number)
+      PassengerTrain.new(train_number)
       puts ''
       print 'Добавлен поезд: '
       puts Train.all.last.number, ' ', Train.all.last.type
     when 2
-      Train.all << CargoTrain.new(train_number)
+      CargoTrain.new(train_number)
       puts ''
       print 'Добавлен поезд: '
       puts Train.all.last.number, ' ', Train.all.last.type

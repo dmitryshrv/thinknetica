@@ -1,5 +1,5 @@
 class Train
-  include brand
+  include BrandName
   include InstanceCounter
   attr_reader :speed, :type, :wagons, :number
   @@trains = []
@@ -18,7 +18,7 @@ class Train
   end
 
   def self.all
-    trains
+    @@trains
   end
 
   def speed_up(speed)
