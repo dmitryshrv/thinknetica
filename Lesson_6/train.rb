@@ -3,7 +3,7 @@ class Train
   include InstanceCounter
   include Validation
 
-  NUMBER_FORMAT = /^([a-zа-я]|\d){3}-?([a-zа-я]|\d){2}$/i
+  NUMBER_FORMAT = /^([a-zа-я]|\d){3}-?([a-zа-я]|\d){2}/
 
   attr_reader :speed, :type, :wagons, :number
   @@trains = []
@@ -21,7 +21,7 @@ class Train
   def valid!
     raise 'Поезд должен иметь номер' if @number.nil?
     raise 'Поезд должен иметь тип' if @type.nil?
-    raise 'Номер неправильного формата' unless @numer =~ NUMBER_FORMAT
+    raise 'Номер неправильного формата' unless @number =~ NUMBER_FORMAT
   end
 
   def self.find(number)

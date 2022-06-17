@@ -214,6 +214,8 @@ protected
         puts Train.all.last.number, ' ', Train.all.last.type
       rescue => e
         puts e.message
+        train_number = gets.chomp
+        retry
       end
     when 2
       begin
@@ -223,6 +225,8 @@ protected
         puts Train.all.last.number, ' ', Train.all.last.type
       rescue => e
         puts e.message
+        train_number = gets.chomp
+        retry
       end
     end
   end
