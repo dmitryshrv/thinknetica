@@ -3,7 +3,7 @@ class Train
   include InstanceCounter
   include Validation
 
-  NUMBER_FORMAT = /^([a-zа-я]|\d){3}-?([a-zа-я]|\d){2}/
+  NUMBER_FORMAT = /^([a-zа-я]|\d){3}-?([a-zа-я]|\d){2}/.freeze
 
   attr_reader :speed, :type, :wagons, :number
 
@@ -49,7 +49,7 @@ class Train
     wagons.delete.last
   end
 
-  def set_route(route)
+  def take_route(route)
     @route = route
     @current_station_index = 0
     @route.stations.first.add_train(self)

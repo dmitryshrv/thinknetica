@@ -335,7 +335,7 @@ class MainMenu
 
       case choice
       when 1
-        Train.all[train_choice - 1].set_route(Route.all[choice_route - 1])
+        Train.all[train_choice - 1].take_route(Route.all[choice_route - 1])
         break
       when 2
         puts ' '
