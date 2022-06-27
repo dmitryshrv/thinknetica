@@ -1,22 +1,23 @@
 class Train
   include BrandName
   include InstanceCounter
-  include Acсessors
   include Validation
+  include Accessors
 
   NUMBER_FORMAT = /^([a-zа-я]|\d){3}-?([a-zа-я]|\d){2}/.freeze
 
   attr_reader :speed, :type, :wagons, :number
-  validate :number, :presence
+
+  validate :name, :presence
   validate :number, :format, NUMBER_FORMAT
 
   @@trains = []
 
   def initialize(number, type)
     @number = number
+    validate!
     @type = type
     @speed = 0
-    valid!
     @wagons = []
     @@trains << self
     register_instance

@@ -3,6 +3,7 @@ class Station
   include Validation
 
   attr_reader :trains, :name
+
   validate :name, :presence
   validate :name, :type, String
 
@@ -10,7 +11,7 @@ class Station
 
   def initialize(name)
     @name = name
-    valid!
+    validate!
     @trains = []
     @@stations_all << self
     register_instance

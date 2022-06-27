@@ -3,12 +3,13 @@ class Route
   include Validation
 
   attr_reader :stations
+  
   validate :stations, :presence
 
   @@routes = []
 
   def initialize(first_station, last_station)
-    valid!
+    validate!
     @stations = [first_station, last_station]
     @@routes << self
     register_instance

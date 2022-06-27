@@ -5,15 +5,16 @@ module Validation
   end
 
   module ClassMethods
-    def validate(name, valitation_type, *validation_params)
-      @validations ||= {}
-      params = {
-        name: name, valitation_type: valitation_type, valitation_params: validation_params
-      }
-      instance_variable_set(:name, validations << params)
+    def validations
+      @validations ||= []
     end
 
-    attr_reader :validations
+    def validate(name, validation_type, validation_param = nil)
+      options = {
+        name: name, validation_type: validation_type, validation_param: validation_param
+      }
+      instance_variable_set(:@validations, validations << options)
+    end
   end
 
   module InstanceMethods
@@ -25,25 +26,19 @@ module Validation
     end
 
     def validate!
-      validations.each do |name, parameters|
-        parameters.each do |validation|
-          validation_type = validation[:validation_type]
-          validation_option = validation[:validation_params]
-          send("validate_#{validation_type}", instance_variable_get("@#{name}"), validation_option)
+      self.class.validations.each do |options| 
+        name, validaton_type, optional_parameter = options.values
+        value = instance_variable_get("@#{name}".to_sym)
+
+        case validaton_type
+        when :presence
+          raise ArgumentError, 'Должно быть название или номер!' if value.nil? || value.to_s.empty?
+        when :format
+          raise ArgumentError, 'Неверный формат!' unless value =~ optional_parameter
+        when :type
+          raise TypeError, 'Неверный тип!' unless value.is_a?(optional_parameter)
         end
       end
-    end
-
-    def validate_type(value, type)
-      raise 'Неверный тип' unless value.is_a?(type)
-    end
-
-    def validate_presence(value, option)
-      raise 'Должно быть значение' if value.nil? || value.empty?
-    end
-
-    def validate_format(value, format)
-      raise 'Некорректный формат!' if value !~ format
     end
   end
 end
