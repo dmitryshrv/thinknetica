@@ -8,7 +8,7 @@ class Train
 
   attr_reader :speed, :type, :wagons, :number
 
-  validate :name, :presence
+  validate :number, :presence
   validate :number, :format, NUMBER_FORMAT
 
   @@trains = []
